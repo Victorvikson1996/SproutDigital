@@ -5,6 +5,17 @@ import { StatusBar } from "expo-status-bar";
 import { Header } from "../Components/Header";
 
 const ProfileScreen = () => {
+  const [userDetails, setUserDetails] = React.useState();
+  React.useEffect(() => {
+    getUserData();
+  }, []);
+
+  const getUserData = async () => {
+    const userData = await AsyncStorage.getItem("userData");
+    if (userData) {
+      setUserDetails(JSON.parse(userData));
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
@@ -15,7 +26,7 @@ const ProfileScreen = () => {
         </View>
         <View>
           <Text style={styles.name}>Sprout Digital</Text>
-          <Text style={styles.mail}>speoutdigital.gmail.com</Text>
+          <Text style={styles.mail}>info@sproutdigital.xyz</Text>
         </View>
       </View>
     </SafeAreaView>
