@@ -6,11 +6,16 @@ import {
   Image,
   ScrollView,
   Keyboard,
+  Alert,
 } from "react-native";
 import React from "react";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { COLORS } from "../../../utils";
 import { StatusBar } from "expo-status-bar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { DefaultTextInput } from "../../Components/TextInput";
+import { SignUpButton, LoginButton } from "../../Components/Buttons";
+import { Loader } from "../../Components/Loader";
 
 const SignUpScreen = ({ navigation }) => {
   const [inputs, setInputs] = React.useState({
@@ -33,7 +38,7 @@ const SignUpScreen = ({ navigation }) => {
     }
 
     if (!inputs.name) {
-      handleError("Please input fullname", "fullname");
+      handleError("Please input name", "name");
       isValid = false;
     }
 
@@ -41,9 +46,29 @@ const SignUpScreen = ({ navigation }) => {
       register();
     }
   };
-  const register = () => {};
+  const register = () => {
+    setLoading(true);
+    setTimeout(() => {
+      try {
+        setLoading(false);
+        AsyncStorage.setItem("userData", JSON.stringify(inputs));
+        navigation.navigate("LOGIN");
+      } catch (error) {
+        Alert.alert("Error", "Something went wrong");
+      }
+    }, 3000);
+  };
+
+  const handleOnchange = (text, input) => {
+    setInputs((prevState) => ({ ...prevState, [input]: text }));
+  };
+  const handleError = (error, input) => {
+    setErrors((prevState) => ({ ...prevState, [input]: error }));
+  };
+
   return (
     <SafeAreaView style={styles.container}>
+      <Loader visible={loading} />
       <StatusBar style="auto" />
       <View style={styles.logocontaier}>
         <Image
@@ -53,6 +78,23 @@ const SignUpScreen = ({ navigation }) => {
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.text}>Set Up Profile</Text>
+      </View>
+      <View style={{ marginVertical: 20, marginHorizontal: 40 }}>
+        <DefaultTextInput
+          onChangeText={(text) => handleOnchange(text, "name")}
+          onFocus={() => handleError(null, "name")}
+          placeholder="Name"
+          error={errors.name}
+        />
+        <DefaultTextInput
+          onChangeText={(text) => handleOnchange(text, "email")}
+          onFocus={() => handleError(null, "email")}
+          placeholder="Enter your email address"
+          error={errors.email}
+        />
+        <View style={{ alignItems: "center", marginVertical: 20 }}>
+          <LoginButton onPress={validate} title="Login" />
+        </View>
       </View>
     </SafeAreaView>
   );

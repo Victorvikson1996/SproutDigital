@@ -10,6 +10,7 @@ import React from "react";
 import { COLORS } from "../../utils";
 import { StatusBar } from "expo-status-bar";
 import { SignUpButton, LoginButton } from "../Components/Buttons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const background = require("../assets/Images/background.png");
 
