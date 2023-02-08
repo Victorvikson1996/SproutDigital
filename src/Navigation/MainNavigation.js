@@ -11,8 +11,10 @@ const MainNavigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="ONBOARD" component={OnBoardScreen} />
         <Stack.Screen name="LOGIN" component={LoginScreen} />
         <Stack.Screen name="SIGNUP" component={SignUpScreen} />
+        <Stack.Screen name="PROFILE" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
